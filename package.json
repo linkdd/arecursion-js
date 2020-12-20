@@ -1,6 +1,10 @@
 {
   "name": "arecursion-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "keywords": [
+    "recursion",
+    "async"
+  ],
   "description": "Asynchronous recursion without maximum depth",
   "main": "src/index.js",
   "repository": "https://github.com/linkdd/arecursion-js",
