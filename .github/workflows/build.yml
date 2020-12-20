@@ -1,0 +1,39 @@
+---
+name: Test build and publish Node package
+
+on:
+  - push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout@scm
+        uses: actions/checkout@master
+
+      - name: setup@node
+        uses: actions/setup-node@master
+        with:
+          node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+
+      - name: setup@yarn
+        run: npm install -g yarn
+
+      - name: install@yarn
+        run: yarn install
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+      - name: lint@yarn
+        run: yarn run lint
+
+      - name: test@yarn
+        run: yarn run test
+
+      - name: publish@yarn
+        if: github.ref == 'refs/heads/main'
+        run: /bin/sh .github/scripts/maybe-publish.sh
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
