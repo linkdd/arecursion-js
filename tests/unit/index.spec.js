@@ -59,5 +59,38 @@ describe('recursion', () => {
       const result = await slow_sum(5)
       expect(result).to.equal(15)
     })
+
+    it('should raise the exception thrown in a recursion', async () => {
+      const will_fail = recursion.doAsync(() => {
+        throw new Error('must fail')
+      })
+
+      try {
+        await will_fail()
+        throw new Error('did not fail')
+      }
+      catch (err) {
+        expect(err).to.be.an('error')
+        expect(err.message).to.equal('must fail')
+      }
+    })
+
+    it('should raise the exception thrown in an async recursion', async () => {
+      const will_fail = recursion.doAsync(async () => {
+        // async breakpoint, abstracts away an asynchronous task
+        await 0
+
+        throw new Error('must fail')
+      })
+
+      try {
+        await will_fail()
+        throw new Error('did not fail')
+      }
+      catch (err) {
+        expect(err).to.be.an('error')
+        expect(err.message).to.equal('must fail')
+      }
+    })
   })
 })
