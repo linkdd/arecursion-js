@@ -1,5 +1,3 @@
-const { setImmediate } = require('util')
-
 module.exports = {
   iterate: (...args) => ({ recurse: true, args }),
   end: (result) => ({ recurse: false, result }),
@@ -9,7 +7,7 @@ module.exports = {
         const nextIteration = status => {
           if (status.recurse) {
             const nextHandler = handler(...status.args)
-            setImmediate(nextHandler(resolve, reject))
+            setImmediate(() => nextHandler(resolve, reject))
           }
           else {
             resolve(status.result)
